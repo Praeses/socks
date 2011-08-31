@@ -9,16 +9,22 @@ app.use express.bodyParser()
 app.get '/', (req, res) -> res.send('this is socks')
 
 app.post '/generate_report', (req, res) -> 
+  console.log 'starting request'
   name = req.body.name
   delete req.body.name
 
   params = createFiles req.body
+  
+  console.log 'files created'
 
   fileName = params['filename']
   delete params['filename']
 
   PDF = pdfLib.pdf params
+  console.log 'created pdf object'
   new PDF( { filename: fileName } ).convertAs "#{name}.pdf", (err, stdout) -> 
+    console.log err 
+    console.log 'seemed to work'
     res.sendfile "#{name}.pdf"
     
     outErr = (err) -> throw err if err
