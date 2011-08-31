@@ -1,0 +1,30 @@
+{
+  "name":         "socks",
+  "version":      "0.0.2",
+  "description":  "wkhtmltopdf web service",
+  "keywords":     [ "pdf", "wkhtmltopdf" ],
+  "maintainers":  [ {
+    "name":   "Zac Kleinpeter",
+    "email":  "zac@kleinpeter.org"
+  }],
+  "bugs": {
+    "mail": "zac@kleinpeter.com"
+  },
+  "repositories": [ {
+      "type":  "git",
+      "url":   "git@github.com:Praeses/socks.git"
+  } ],
+  "engine": "node >= 0.4.7",
+  "dependencies": {
+    "express":  "2.4.6",
+    "coffee-script":  "1.1.1",
+    "node-wkhtml":  "0.0.3"
+  },
+  "devDependencies": {
+    "docco":          "0.3.0",
+    "jasmine-node":   "1.0.6"
+  },
+  "os":       ["linux", "macos"],
+  "cpu":      ["x86", "x86_64"],
+  "engines":  ["v8", "ejs", "node", "rhino"]
+}
