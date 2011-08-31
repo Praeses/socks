@@ -43,9 +43,9 @@ createFiles = (params) ->
 # Otherwise don't do this step
 processSection = (params, baseName, inName, outName) ->
   if params[inName]?
-    foot = "./tmp/#{now}.#{outName}.html"
-    fs.writeFileSync foot, params[inName]
+    tmp = "./tmp/#{baseName}.#{outName}.html"
+    fs.writeFileSync tmp, params[inName]
     delete params[inName]
-    params[outName] = foot
+    params[outName] = tmp
 
   params
