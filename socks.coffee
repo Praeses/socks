@@ -1,4 +1,4 @@
-## Require HTTP module (to start server) and Socket.IO
+## Require HTTP module (to start server)
 express = require 'express'
 pdfLib  = require './node-wkhtml'
 app     = express.createServer()
@@ -9,22 +9,16 @@ app.use express.bodyParser()
 app.get '/', (req, res) -> res.send('this is socks')
 
 app.post '/generate_report', (req, res) -> 
-  console.log 'starting request'
   name = req.body.name
   delete req.body.name
 
   params = createFiles req.body
   
-  console.log 'files created'
-
   fileName = params['filename']
   delete params['filename']
 
   PDF = pdfLib.pdf params
-  console.log 'created pdf object'
   new PDF( { filename: fileName } ).convertAs "#{name}.pdf", (err, stdout) -> 
-    console.log err 
-    console.log 'seemed to work'
     res.sendfile "#{name}.pdf"
     
     outErr = (err) -> throw err if err
@@ -35,23 +29,23 @@ app.post '/generate_report', (req, res) ->
 port = process.env.PORT || 9238
 app.listen port, -> console.log "Listening on #{port}"
 
+# Create files if needed
 createFiles = (params) ->
   now = new Date().getTime().toString()
-
-  head    = "./tmp/#{now}.head.html"
-  foot    = "./tmp/#{now}.footer.html"
-  content = "./tmp/#{now}.content.html"
-
-  fs.writeFileSync head    , params['data-header-html']
-  fs.writeFileSync content , params['data-html']       
-  fs.writeFileSync foot    , params['data-footer-html']
   
-  delete params['data-header-html']
-  delete params['data-html']
-  delete params['data-footer-html']
-
-  params['header-html'] = head
-  params['filename']    = content
-  params['footer-html'] = foot
+  params = processSection params , now , 'data-header-html' , 'header-html'
+  params = processSection params , now , 'data-html'        , 'filename'
+  params = processSection params , now , 'data-footer-html' , 'footer-html'
 
   return params
+
+# Process each section and create files if nessary
+# Otherwise don't do this step
+processSection = (params, baseName, inName, outName) ->
+  if params[inName]?
+    foot = "./tmp/#{now}.#{outName}.html"
+    fs.writeFileSync foot, params[inName]
+    delete params[inName]
+    params[outName] = foot
+
+  params
