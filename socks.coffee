@@ -22,9 +22,12 @@ app.post '/generate_report', (req, res) ->
     res.sendfile "#{name}.pdf"
     
     outErr = (err) -> throw err if err
-    fs.unlink fileName              , outErr
-    fs.unlink params['header-html'] , outErr
-    fs.unlink params['footer-html'] , outErr
+    if /^\.\/tmp/.test fileName
+      fs.unlink fileName              , outErr
+    if /^\.\/tmp/.test params['header-html']
+      fs.unlink params['header-html'] , outErr
+    if /^\.\/tmp/.test params['footer-html']
+      fs.unlink params['footer-html'] , outErr
 
 port = process.env.PORT || 9238
 app.listen port, -> console.log "Listening on #{port}"
