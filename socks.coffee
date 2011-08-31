@@ -8,6 +8,14 @@ app.use express.bodyParser()
 
 app.get '/', (req, res) -> res.send('this is socks')
 
+app.post '/generate_report_from_url', (req, res) -> 
+  url = params.url
+  delete params.url
+  PDF = pdfLib.pdf params
+  new PDF( { url: url } ).convertAs "report.pdf", (err, stdout) -> 
+    console.log err
+    res.sendfile "report.pdf"
+
 app.post '/generate_report', (req, res) -> 
   name = req.body.name
   delete req.body.name
