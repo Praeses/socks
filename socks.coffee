@@ -19,6 +19,7 @@ app.post '/generate_report', (req, res) ->
 
   PDF = pdfLib.pdf params
   new PDF( { filename: fileName } ).convertAs "#{name}.pdf", (err, stdout) -> 
+    console.log err
     res.sendfile "#{name}.pdf"
     
     outErr = (err) -> throw err if err
