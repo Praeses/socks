@@ -1,6 +1,6 @@
 ## Require HTTP module (to start server) and Socket.IO
 express = require 'express'
-pdfLib  = require('node-wkhtml')
+pdfLib  = require './node-wkhtml'
 app     = express.createServer()
 fs      = require 'fs'
 
