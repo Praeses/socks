@@ -3,11 +3,13 @@ express = require 'express'
 pdfLib  = require './node-wkhtml'
 app     = express.createServer()
 fs      = require 'fs'
+uuid    = require 'node-uuid'
 
 app.use express.bodyParser()
 
 app.get '/', (req, res) -> res.send('this is socks')
 
+# Give the generate a url and it will give you a report
 app.post '/generate_report_from_url', (req, res) -> 
   params = req.body
   url = params.url
@@ -17,8 +19,9 @@ app.post '/generate_report_from_url', (req, res) ->
     console.log err
     res.sendfile "report.pdf"
 
+# Generate a report from given post options
 app.post '/generate_report', (req, res) -> 
-  name = req.body.name
+  name = uuid()
   delete req.body.name
 
   params = createFiles req.body
@@ -44,8 +47,8 @@ app.listen port, -> console.log "Listening on #{port}"
 
 # Create files if needed
 createFiles = (params) ->
-  now = new Date().getTime().toString()
-  
+  now = uuid()
+
   params = processSection params , now , 'data-header-html' , 'header-html'
   params = processSection params , now , 'data-html'        , 'filename'
   params = processSection params , now , 'data-footer-html' , 'footer-html'
